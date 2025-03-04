@@ -1,8 +1,10 @@
-﻿namespace MagicLibrary.Core.Domain.Models
+﻿using MagicLibrary.Core.Domain.Interfaces;
+
+namespace MagicLibrary.Core.Domain.Models
 {
-    public class User
+    public class User : IEntity
     {
-        public int UserId { get; set; }
+        public int Id { get; set; }
 
         public string FullName { get; set; } = null!;
 

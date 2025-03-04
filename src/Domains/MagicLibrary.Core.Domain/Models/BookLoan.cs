@@ -1,8 +1,10 @@
-﻿namespace MagicLibrary.Core.Domain.Models
+﻿using MagicLibrary.Core.Domain.Interfaces;
+
+namespace MagicLibrary.Core.Domain.Models
 {
-    public class BookLoan
+    public class BookLoan : IEntity
     {
-        public int LoanId { get; set; }
+        public int Id { get; set; }
 
         public Book Book { get; set; } = null!;
 
