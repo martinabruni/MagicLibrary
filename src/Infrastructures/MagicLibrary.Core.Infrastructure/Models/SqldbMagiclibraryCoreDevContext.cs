@@ -15,26 +15,26 @@ public partial class SqldbMagiclibraryCoreDevContext : DbContext
     {
     }
 
-    public virtual DbSet<Author> Authors { get; set; }
+    public virtual DbSet<AuthorEntity> Authors { get; set; }
 
-    public virtual DbSet<Book> Books { get; set; }
+    public virtual DbSet<BookEntity> Books { get; set; }
 
-    public virtual DbSet<BookLoan> BookLoans { get; set; }
+    public virtual DbSet<BookLoanEntity> BookLoans { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<UserEntity> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Author>(entity =>
+        modelBuilder.Entity<AuthorEntity>(entity =>
         {
-            entity.HasKey(e => e.AuthorId).HasName("PK__Authors__70DAFC34B92360EE");
+            entity.HasKey(e => e.Id).HasName("PK__Authors__70DAFC34B92360EE");
 
             entity.Property(e => e.Name).HasMaxLength(100);
         });
 
-        modelBuilder.Entity<Book>(entity =>
+        modelBuilder.Entity<BookEntity>(entity =>
         {
-            entity.HasKey(e => e.BookId).HasName("PK__Books__3DE0C2079D717010");
+            entity.HasKey(e => e.Id).HasName("PK__Books__3DE0C2079D717010");
 
             entity.Property(e => e.Genre).HasMaxLength(50);
             entity.Property(e => e.Title).HasMaxLength(200);
@@ -45,9 +45,9 @@ public partial class SqldbMagiclibraryCoreDevContext : DbContext
                 .HasConstraintName("FK_Book_Author");
         });
 
-        modelBuilder.Entity<BookLoan>(entity =>
+        modelBuilder.Entity<BookLoanEntity>(entity =>
         {
-            entity.HasKey(e => e.LoanId).HasName("PK__BookLoan__4F5AD457E4A6F9F0");
+            entity.HasKey(e => e.Id).HasName("PK__BookLoan__4F5AD457E4A6F9F0");
 
             entity.HasOne(d => d.Book).WithMany(p => p.BookLoans)
                 .HasForeignKey(d => d.BookId)
@@ -60,9 +60,9 @@ public partial class SqldbMagiclibraryCoreDevContext : DbContext
                 .HasConstraintName("FK_Loan_User");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<UserEntity>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C99E810F0");
+            entity.HasKey(e => e.Id).HasName("PK__Users__1788CC4C99E810F0");
 
             entity.HasIndex(e => e.Email, "UQ__Users__A9D1053484A71766").IsUnique();
 

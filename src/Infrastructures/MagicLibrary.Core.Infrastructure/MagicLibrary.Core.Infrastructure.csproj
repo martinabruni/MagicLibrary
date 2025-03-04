@@ -20,4 +20,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domains\MagicLibrary.Core.Domain\MagicLibrary.Core.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
