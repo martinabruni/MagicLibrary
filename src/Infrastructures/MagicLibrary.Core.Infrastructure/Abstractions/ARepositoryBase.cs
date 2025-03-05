@@ -1,6 +1,7 @@
 ﻿using MagicLibrary.Core.Domain.Interfaces;
 using MagicLibrary.Core.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace MagicLibrary.Core.Infrastructure.Abstractions
 {
@@ -16,15 +17,9 @@ namespace MagicLibrary.Core.Infrastructure.Abstractions
             _dbSet = _context.Set<TEntity>();
         }
 
-        public async Task<TEntity?> GetByIdAsync(int id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
+        public async Task<TEntity?> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
+        public async Task<IEnumerable<TEntity>> GetAllAsync() => await _dbSet.ToListAsync();
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
@@ -58,9 +53,10 @@ namespace MagicLibrary.Core.Infrastructure.Abstractions
             return dbEntity;
         }
 
-        public async Task Save()
-        {
-            await _context.SaveChangesAsync();
-        }
+        public async Task Save() => await _context.SaveChangesAsync();
+
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> filter) => await _dbSet.AnyAsync(filter);
+
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter) => await _dbSet.Where(filter).ToListAsync();
     }
 }

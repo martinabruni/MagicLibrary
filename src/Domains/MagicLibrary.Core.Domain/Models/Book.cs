@@ -11,5 +11,7 @@ namespace MagicLibrary.Core.Domain.Models
         public string? Genre { get; set; }
 
         public Author Author { get; set; } = null!;
+
+        public bool IsAvailable { get; set; } = true;
     }
 }

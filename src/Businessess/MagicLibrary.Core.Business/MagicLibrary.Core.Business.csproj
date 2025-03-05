@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Domains\MagicLibrary.Core.Domain\MagicLibrary.Core.Domain.csproj" />
     <ProjectReference Include="..\..\Infrastructures\MagicLibrary.Core.Infrastructure\MagicLibrary.Core.Infrastructure.csproj" />
   </ItemGroup>
