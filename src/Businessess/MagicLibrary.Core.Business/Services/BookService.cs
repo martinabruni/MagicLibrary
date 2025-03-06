@@ -27,10 +27,19 @@ namespace MagicLibrary.Core.Business.Services
                 return await Task.FromResult(response);
             }
 
-            var authorExists = _authorRepository.ExistsAsync(a => a.Id == model.Author.Id);
+            var authorExists = await _authorRepository.ExistsAsync(a => a.Id == model.Author.Id);
 
-            if (!authorExists.Result)
-                await _authorService.AddAsync(model.Author);
+            if (!authorExists)
+            {
+                var author = await _authorService.AddAsync(model.Author);
+                var isAuthorValid = author.StatusCode == ApplicationStatusCode.Created;
+                if (!isAuthorValid)
+                {
+                    response.StatusCode = ApplicationStatusCode.BadRequest;
+                    return await Task.FromResult(response);
+                }
+                model.Author = author.Data!;
+            }
 
             return await base.AddAsync(model, errorCondition);
         }

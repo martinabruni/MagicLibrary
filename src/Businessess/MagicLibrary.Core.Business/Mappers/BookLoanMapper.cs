@@ -6,30 +6,23 @@ namespace MagicLibrary.Core.Business.Mappers
 {
     internal class BookLoanMapper : IMapper<BookLoanEntity, BookLoan>
     {
+        private readonly IMapper<BookEntity, Book> _bookMapper;
+
+        private readonly IMapper<UserEntity, User> _userMapper;
+
+        public BookLoanMapper(IMapper<UserEntity, User> userMapper, IMapper<BookEntity, Book> bookMapper)
+        {
+            _userMapper = userMapper;
+            _bookMapper = bookMapper;
+        }
+
         public BookLoan MapToDomain(BookLoanEntity entity)
         {
             return new BookLoan
             {
                 Id = entity.Id,
-                Book = new Book
-                {
-                    Id = entity.BookId,
-                    Author = new Author
-                    {
-                        Id = entity.Book.AuthorId,
-                        Name = entity.Book.Author.Name,
-                        BirthDate = entity.Book.Author.BirthDate,
-                    },
-                    Title = entity.Book.Title,
-                    Genre = entity.Book.Genre,
-                },
-                User = new User
-                {
-                    Id = entity.UserId,
-                    FullName = entity.User.FullName,
-                    Email = entity.User.Email,
-                    MembershipDate = entity.User.MembershipDate,
-                },
+                Book = _bookMapper.MapToDomain(entity.Book),
+                User = _userMapper.MapToDomain(entity.User),
                 LoanDate = entity.LoanDate,
                 ReturnDate = entity.ReturnDate,
             };
@@ -39,7 +32,6 @@ namespace MagicLibrary.Core.Business.Mappers
         {
             return new BookLoanEntity
             {
-                Id = domain.Id,
                 BookId = domain.Book.Id,
                 UserId = domain.User.Id,
                 LoanDate = domain.LoanDate,

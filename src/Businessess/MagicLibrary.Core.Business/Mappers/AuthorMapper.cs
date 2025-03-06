@@ -20,7 +20,6 @@ namespace MagicLibrary.Core.Business.Mappers
         {
             return new AuthorEntity
             {
-                Id = domain.Id,
                 Name = domain.Name,
                 BirthDate = domain.BirthDate,
             };

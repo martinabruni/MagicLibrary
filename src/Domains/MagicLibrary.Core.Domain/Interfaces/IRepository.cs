@@ -19,5 +19,9 @@ namespace MagicLibrary.Core.Domain.Interfaces
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> filter);
 
         Task Save();
+
+        Task<TEntity?> GetByIdAsync(int id, params Expression<Func<TEntity, object>>[] includes);
+
+        Task<TEntity?> DeleteAsync(TEntity dbEntity);
     }
 }

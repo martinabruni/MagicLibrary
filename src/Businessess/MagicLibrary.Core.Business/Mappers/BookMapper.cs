@@ -6,6 +6,13 @@ namespace MagicLibrary.Core.Business.Mappers
 {
     internal class BookMapper : IMapper<BookEntity, Book>
     {
+        private readonly IMapper<AuthorEntity, Author> _authorMapper;
+
+        public BookMapper(IMapper<AuthorEntity, Author> authorMapper)
+        {
+            _authorMapper = authorMapper;
+        }
+
         public Book MapToDomain(BookEntity entity)
         {
             return new Book
@@ -13,12 +20,7 @@ namespace MagicLibrary.Core.Business.Mappers
                 Id = entity.Id,
                 Title = entity.Title,
                 Genre = entity.Genre,
-                Author = new Author
-                {
-                    Id = entity.Author.Id,
-                    Name = entity.Author.Name,
-                    BirthDate = entity.Author.BirthDate,
-                },
+                Author = _authorMapper.MapToDomain(entity.Author),
             };
         }
 
@@ -26,10 +28,10 @@ namespace MagicLibrary.Core.Business.Mappers
         {
             return new BookEntity
             {
-                Id = domain.Id,
                 Title = domain.Title,
                 Genre = domain.Genre,
                 AuthorId = domain.Author.Id,
+                Author = _authorMapper.MapToEntity(domain.Author),
             };
         }
     }

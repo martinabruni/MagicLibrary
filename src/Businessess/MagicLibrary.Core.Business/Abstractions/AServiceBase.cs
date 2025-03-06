@@ -1,5 +1,6 @@
 ﻿using MagicLibrary.Core.Domain;
 using MagicLibrary.Core.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq.Expressions;
 
 namespace MagicLibrary.Core.Business.Abstractions
@@ -15,7 +16,6 @@ namespace MagicLibrary.Core.Business.Abstractions
             _mapper = mapper;
         }
 
-
         public async virtual Task<DefaultResponse<TDomain>> AddAsync(TDomain model, Expression<Func<TEntity, bool>>? errorCondition)
         {
             DefaultResponse<TDomain> response = new();
@@ -30,13 +30,13 @@ namespace MagicLibrary.Core.Business.Abstractions
             }
 
             return response;
-
         }
 
         public async virtual Task<DefaultResponse<TDomain>> DeleteAsync(int id)
         {
             DefaultResponse<TDomain> response = new();
-            if (id <= 0)
+            var exists = await _repository.ExistsAsync(e => e.Id == id);
+            if (!exists)
                 response.StatusCode = ApplicationStatusCode.BadRequest;
             else
             {
@@ -53,15 +53,19 @@ namespace MagicLibrary.Core.Business.Abstractions
             DefaultResponse<IEnumerable<TDomain>> response = new()
             {
                 Data = (await _repository.GetAllAsync()).Select(_mapper.MapToDomain),
-                StatusCode = ApplicationStatusCode.Success
             };
+            if (response.Data.IsNullOrEmpty())
+                response.StatusCode = ApplicationStatusCode.NoContent;
+            else
+                response.StatusCode = ApplicationStatusCode.Success;
             return response;
         }
 
         public async virtual Task<DefaultResponse<TDomain>> GetByIdAsync(int id)
         {
             DefaultResponse<TDomain> response = new();
-            if (id <= 0)
+            var exists = await _repository.ExistsAsync(e => e.Id == id);
+            if (!exists)
                 response.StatusCode = ApplicationStatusCode.BadRequest;
             else
             {
